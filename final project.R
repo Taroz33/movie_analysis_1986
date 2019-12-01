@@ -33,36 +33,13 @@ which(movie$country[top.10.company]=="UK")
 top.10.compnay_Canada<-top.10.company[which(movie$country[top.10.company]=="Canada")]
 top.10.compnay_Canada
 ####The bar of top 10 companies
-p<-plot_ly(y=as.numeric(top.10.compnay_USA), x=names(top.10.compnay_USA),type = "bar", 
-           marker = list(color = 'rgb(8,48,107)')) 
-p
-p<-add_trace(p,y=as.numeric(top.10.compnay_UK), x=names(top.10.compnay_UK),type = "bar", 
-          marker = list(color = "blue"))
-p
-
-p<-add_trace(p,y=as.numeric(top.10.compnay_Canada), x=names(top.10.compnay_Canada),type = "bar", 
-          marker = list(color = "green"))
-p
-?add_trace
-
-
-
-
-names(top.10.company)
-as.numeric(top.10.company)
-p <- plot_ly(y=as.numeric(top.10.company), x=names(top.10.company),type = "bar", 
-             marker = list(color = 'rgb(58,200,225)')) 
-p
-
-p <- plot_ly(data, x = ~x, y = ~y1, type = 'bar', name = 'Primary Product', marker = list(color = 'rgb(49,130,189)')) %>%
-  add_trace(y = ~y2, name = 'Secondary Product', marker = list(color = 'rgb(204,204,204)')) %>%
-  layout(xaxis = list(title = "", tickangle = -45),
-         yaxis = list(title = ""),
-         margin = list(b = 100),
-         barmode = 'group')
-
-
-
+distr.top.10.company<-plot_ly(y=as.numeric(top.10.compnay_USA), x=names(top.10.compnay_USA),type = "bar", 
+           marker = list(color = 'lightblue'),name = "USA") 
+distr.top.10.company<-add_trace(distr.top.10.company,y=as.numeric(top.10.compnay_UK), x=names(top.10.compnay_UK),type = "bar", 
+          marker = list(color = "lightpink"),name="UK")
+distr.top.10.company<-add_trace(distr.top.10.company,y=as.numeric(top.10.compnay_Canada), x=names(top.10.compnay_Canada),type = "bar", 
+          marker = list(color = "lightgreen"),name="Canada")
+distr.top.10.company
 
 
 #the buget of movies
@@ -78,17 +55,35 @@ log(movie_budget$budget,base=10)
 boxplot_movie_budget <- plot_ly(x =log(movie_budget$budget,base=10), type = "box")
 boxplot_movie_budget
 
-# mydata<-rnorm(50,0,30)
-# mydata.cut<-cut(mydata,breaks=seq(-50,50,20))
-# table(mydata.cut)
-# mydata.cut
+# the country of movies
+##the numbers of country
+movie_count<-table(movie$country)
+movie_count
+length(movie_count)
+##top 5 countries of issuing movies in 1986
+top.movie_count<-sort(movie_count,decreasing = TRUE)
+top.movie_count
+top.5.movie_count<-head(top.movie_count,n=5)
+top.5.movie_count
+###the distribution of these 5 countries
+###data of top5
+data.movie_count <- data.frame(top.5.movie_count)
+data.movie_count
+names(data.movie_count)<-c("Country","Number of movies")
+data.movie_count
+####the percentage of 5 countries
+count.percentage <- round(top.5.movie_count/sum(top.5.movie_count)*100)
+count.percentage
+data.movie_count$Percentage<-count.percentage
+data.movie_count
+####pie of the countries
+country.top <- data.movie_count[,c("Country", "Percentage")]
+country.top
+class(data.movie_count)
+percen.5 <- plot_ly(country.top, labels = country.top$Country, values = country.top$Percentage, type = 'pie') %>%
+  layout(title = 'The Percetage of Top5 Countries')
+precen.5
 
-# country
-country_count <- as.data.frame(table(movie$country))  # data.Frame(Var1, Freq)
-country_count <- country_count[order(-country_count$Freq),]
-country_count[1:10,]
-cou_top <- movie[movie$country == country_count[1:10,]$Var1,]
-barplot(table(droplevels(cou_top$country)), )
 
 # director
 as.data.frame(table(movie$director))
