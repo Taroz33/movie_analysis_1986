@@ -85,17 +85,92 @@ percen.5 <- plot_ly(country.top, labels = country.top$Country, values = country.
 precen.5
 
 
-# director
-as.data.frame(table(movie$director))
+# directors of movies
+number.director<-table(movie$director)
+number.director<-length(table(movie$director))
+number.director
+
 
 # genre
-genre_count <- as.data.frame(table(movie$genre))  # data.Frame(Var1, Freq)
-genre_count <- genre_count[order(-genre_count$Freq),]
-genre_count
-cou_top <- movie[movie$genre == genre_count[1:10,]$Var1,]
-barplot(table(droplevels(cou_top$genre)), )
+##the genres of movies
+movie.genre<-table(movie$genre)
+movie.genre
+##five main genres of movies
+###five man genres of movies table
+top.5.genere<-sort(table(movie$genre),decreasing = TRUE)
+top.5.genere
+top.5.genere<-head(top.5.genere)
+top.5.genere
+###bar of five man genres
+p <- plot_ly(x = names(top.5.genere), y = as.numeric(top.5.genere), type = 'bar',
+             marker = list(color = "blue")) %>%
+  layout(title = "Least Used Features",
+         xaxis = list(title = ""),
+         yaxis = list(title = ""))
+p
+##percentage of each genere 
+###dataframe
+movie.genre<-table(movie$genre)
+movie.genre
+data.movie.genre<-data.frame(movie.genre)
+data.movie.genre
+names(data.movie.genre)<-c("Genere","Number of movies")
+data.movie.genre
+###percentage
+genere.percentage <- round(data.movie.genre$`Number of movies`/sum(data.movie.genre$`Number of movies`)*100,digits = 2)
+genere.percentage
+data.movie.genre$Percentage<-genere.percentage
+data.movie.genre
+###pie
+percen.genre <- plot_ly(data.movie.genre, labels = data.movie.genre$Genere, values = data.movie.genre$Percentage, type = 'pie') %>%
+  layout(title = 'The Percetage of genere')
+percen.genre
 
-# gross
+
+# gross of movies
+## remove 0 
 movie_gross <- movie[movie$gross != 0,]
-hist(movie_gross$gross, breaks=20, col="lightblue", xlab="Miles Per Gallon", ylab="Budget")
+movie_gross
+##the distribution of gross
+###the five numbers of movie budget and average of movie budget
+fivenum(movie_gross$gross)
+mean(movie_gross$gross)
+###log the distribution
+log(movie_gross$gross,base=10)
+boxplot_movie_gross <- plot_ly(x =log(movie_gross$gross,base=10), type = "box")
+boxplot_movie_gross
+
+#rate of movie
+##data frame of rate
+movie_rate<-data.frame(table(movie$rating))
+movie_rate
+names(movie_rate)<-c("Rating","Numbers of rating")
+movie_rate
+##percentage of rate
+rate.percentage <- round(movie_rate$`Numbers of rating`/sum(movie_rate$`Numbers of rating`)*100,digits = 2)
+rate.percentage
+movie_rate$Percentage<-rate.percentage
+movie_rate
+##pie
+percen.rate <- plot_ly(movie_rate, labels = movie_rate$Rating, values = movie_rate$Percentage, type = 'pie') %>%
+  layout(title = 'The Percetage of rating')
+percen.rate
+
+#scores of movies
+##distribution of scores
+###five numbers of movies
+fivenum(movie$score)
+mean(movie$score)
+###the range of distribution
+boxplot_movie_score <- plot_ly(x =movie$score, type = "box")
+boxplot_movie_score
+##the top scores of movies
+top.score.movie<-movie$name[order(movie$score),decreasing=TRUE]
+top.score.movie<-
+
+
+
+
+
+
 
