@@ -82,7 +82,7 @@ country.top
 class(data.movie_count)
 percen.5 <- plot_ly(country.top, labels = country.top$Country, values = country.top$Percentage, type = 'pie') %>%
   layout(title = 'The Percetage of Top5 Countries')
-precen.5
+percen.5
 
 
 # directors of movies
@@ -165,12 +165,63 @@ mean(movie$score)
 boxplot_movie_score <- plot_ly(x =movie$score, type = "box")
 boxplot_movie_score
 ##the top scores of movies
-top.score.movie<-movie$name[order(movie$score),decreasing=TRUE]
-top.score.movie<-
+top.score.movie<-movie$name[order((movie$score),decreasing=TRUE)]
+top.score.movie[1:10]
+as.character(top.score.movie[1:10])
+movie$score[top.score.movie[1:10]]
+##the bar of top scores
+top.10.score <- plot_ly(x = movie$score[top.score.movie[1:10]], y = as.character(top.score.movie[1:10]), 
+             type = 'bar', orientation = 'h')
+top.10.score
 
+#years of movies
+movie_year<-table(movie$year)
+data.year <- data.frame(names(table(movie$year)), as.numeric(table(movie$year)))
+data.year
+names(data.year)<-c("Year","Numbers of movies")
+data.year
+movie.eachyear <- plot_ly(data.year, x = data.year$Year, y = data.year$`Numbers of movies`, type = 'scatter', mode = 'line')
+movie.eachyear
 
+#compare budget and gross
+##the budget(without 0)
+budget_gross<-movie_budget$gross
+diff_bg<-movie_budget$gross-movie_budget$budget
+diff_bg
+movie_budget$Profit<-diff_bg
+movie_budget
+##correlation 
+corre_bg <- plot_ly(
+  movie_budget, x = ~budget, y = ~gross,
+  color = ~Profit, size = movie_budget$Profit**10,
+  text = ~paste("Profit:",movie_budget$Profit,"Name:",movie_budget$name),
+  type = "scatter",mode="markers")
+corre_bg
 
+#compare scores, voters and movies
+c<-data.frame(movie$name,movie$score,movie$votes)
+level<-function(c){
+  for (i in movie$score) {
+    if(i<=3){
+      result<-c("bad")
+    }
+    else if (i>=4&i<=5){
+      result<-c("fair")
+    }
+    else if(i>=6&i<=7){
+      result<-c("good")
+    }
+    else if(i==8){
+      result<-c("very good")
+    }
+    else if(i>8){
+      result<-c("excellent")
+    }
+  }
+  return(result)
+}
 
+level(c)
 
 
 
